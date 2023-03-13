@@ -6,6 +6,12 @@ import java.io.OutputStream;
 
 abstract class AudioOutputStream extends OutputStream implements Closeable {
 
+
+	@Override
+	public void write(byte[] b, int off, int len) throws IOException {
+		super.write(b, off, len);
+	}
+
 	@Override
 	public void write(final int buf) throws IOException {
 		short[] buffer = new short[1];

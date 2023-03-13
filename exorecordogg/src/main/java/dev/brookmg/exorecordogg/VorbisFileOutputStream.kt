@@ -51,6 +51,11 @@ internal class VorbisFileOutputStream : AudioOutputStream {
      * an `IOException` is thrown if the output
      * stream is closed.
      */
+
+    override fun write(b: ByteArray?, off: Int, len: Int) {
+        writeStreamIdx(oggStreamIdx, b, off, len)
+    }
+
     @Throws(IOException::class)
     override fun write(buffer: ShortArray, offset: Int, length: Int) {
         writeStreamIdx(oggStreamIdx, buffer, offset, length)
@@ -62,6 +67,8 @@ internal class VorbisFileOutputStream : AudioOutputStream {
 
     @Throws(IOException::class)
     private external fun writeStreamIdx(idx: Int, pcmdata: ShortArray, offset: Int, size: Int): Int
+
+    private external fun writeStreamIdx(idx: Int, pcmdata: ByteArray?, offset: Int, size: Int) : Int
 
     @Throws(IOException::class)
     private external fun closeStreamIdx(idx: Int)
