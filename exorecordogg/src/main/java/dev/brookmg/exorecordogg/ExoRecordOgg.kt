@@ -53,12 +53,9 @@ class ExoRecordOgg {
                 while (inputFile.read(buffer) > 0) {
                     if(currentlyRead > totalBytesToWrite) break
                     currentlyRead += 1024
-                    val shortArray = ShortArray(buffer.size / 2) {
-                        (buffer[it * 2].toUByte().toInt() +
-                                (buffer[(it * 2) + 1].toInt() shl 8)).toShort()
-                    }
-                    length = shortArray.size
-                    vorbis.write(shortArray, 0, length)
+
+                    length = buffer.size
+                    vorbis.write(buffer, 0, length)
 
                     coroutineScope.launch {
                         progress.invoke(
