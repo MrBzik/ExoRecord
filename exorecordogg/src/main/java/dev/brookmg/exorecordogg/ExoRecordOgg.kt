@@ -39,34 +39,41 @@ class ExoRecordOgg {
                 inputFile = FileInputStream(applicationContext.filesDir.absolutePath + File.separator + fileName)
                 val fileTotalSize = inputFile.channel.size()
 
+
                 val bytesInMin = fileTotalSize/duration
                 val toSkip = trimStart*bytesInMin
                 inputFile.skip(toSkip + 44)
 
                 val toTrimEnd = trimEnd*bytesInMin
+
                 val totalBytesToWrite = fileTotalSize - toSkip - toTrimEnd
 
-                var currentlyRead = 0
+                inputFile.copyTo(vorbis, 1024)
 
-                val buffer = ByteArray(1024)
-                var length: Int
-                while (inputFile.read(buffer) > 0 && currentlyRead < totalBytesToWrite) {
+//                var currentlyRead = 0
 
-                    currentlyRead += 1024
+//                val buffer = ByteArray(1024)
+//                var length: Int
+//                while (inputFile.read(buffer) > 0 && currentlyRead < totalBytesToWrite) {
+//
+//                    currentlyRead += 1024
 
-                    val shortArray = ShortArray(buffer.size) {
-                        buffer[it].toShort()
-                    }
+//                    val shortArray = ShortArray(buffer.size) {
+//                        buffer[it].toShort()
+//                    }
 
-                    length = shortArray.size
-                    vorbis.write(shortArray, 0, length)
+//                    length = shortArray.size
 
-                    coroutineScope.launch {
-                        progress.invoke(
-                            ((currentlyRead.toFloat()) / totalBytesToWrite.toFloat()) * 100f
-                        )
-                    }
-                }
+
+
+//                    vorbis.write(buffer, 0, buffer.size)
+//
+//                    coroutineScope.launch {
+//                        progress.invoke(
+//                            ((currentlyRead.toFloat()) / totalBytesToWrite.toFloat()) * 100f
+//                        )
+//                    }
+//                }
             } finally {
                 inputFile?.close()
                 vorbis.close()
